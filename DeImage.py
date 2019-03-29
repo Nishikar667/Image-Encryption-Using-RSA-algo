@@ -7,28 +7,6 @@ from tqdm import tqdm
 
 start = time.time()
 
-img = cv.imread('images.jpeg', 0)
-#print(type(img))
-img = img.astype(np.uint16)
-a,b = img.shape
-print('\n\nOriginal image: ')
-print(img)
-print((a,b))
-tup = a,b
-
-for i in tqdm(range(0, tup[0])):
-	for j in tqdm(range(0, tup[1])):
-		x = img[i][j] 
-		x = (pow(x,3)%25777)
-		img[i][j] = x
-
-print('\n\nEncrypted Image:\n\n')
-print(img)
-#cv.imshow('EnImage', img)
-cv.imwrite('EnImg.png', img)
-
-
-
 img1 = imageio.imread('EnImg.png')
 print('\n\nReading Encrypted Image again:\n\n')
 print(img1)
@@ -37,7 +15,7 @@ print(img1)
 img1= img1.tolist()
 print('Decrypting....')
 for i1 in tqdm(range(len(img1))):
-	for j1 in tqdm(range(len(img1[i]))):
+	for j1 in tqdm(range(len(img1[i1]))):
 		x1 = img1[i1][j1] 
 		x1 = (pow(x1,16971)%25777)
 		img1[i1][j1] = x1
