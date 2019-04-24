@@ -1,5 +1,3 @@
-#TODO exception handling 
-
 import cv2 as cv 
 import numpy as np
 import png
@@ -11,11 +9,12 @@ from tkinter.ttk import *
 from tkinter import ttk
 from tkinter import *
 from tkinter import messagebox
+import visvis as vv
 
 start = time.time()
 
 image_window = Tk()
-image_window.geometry ( '350x200' )
+image_window.geometry ( '355x200' )
 image_window.title ('Image Cryptography')
 
 def goback():
@@ -40,12 +39,10 @@ def enfinish():
 def definish():
 	messagebox.showinfo('Done!', 'Decryption is finished and saved as DeImage.png')
 
-def encrypt():
+def grey_encrypt():
 
 	try:
-			
-		if(messagebox.askyesno('Select Mode', 'Do you want to have it as greyscale? ') == True): 
-		
+
 			img = cv.imread(askopenfilename(), 0)
 			#print(type(img))
 			img = img.astype(np.uint16)
@@ -61,7 +58,8 @@ def encrypt():
 					img[i][j] = x
 			print('\n\nEncrypted Image:\n\n')
 			print(img)
-			#cv.imshow('EnImage', img)
+			vv.imshow(img)
+			#imageio.imshow('EnImage', img) ##TODO this part
 			cv.imwrite('EnImg.png', img)
 			end = time.time()
 			eTime = end - start
@@ -69,17 +67,16 @@ def encrypt():
 
 			enfinish()
 			
-			myframe = ttk.Frame(image_window)
-			myentry = ttk.Entry(myframe, textvariable=img, state='readonly')               ##TODO this is not working 
-			myscroll = ttk.Scrollbar(myframe, orient='vertical', command=myentry.xview)
-			myentry.config(xscrollcommand=myscroll.set)
-				
-			myframe.place()
-			myentry.place(x=30, y=30)
-			myscroll.place(x=40, y=40)
-			image_window.mainloop()
 
-		else:
+	except TypeError:
+		filenameerror()
+
+	except AttributeError:
+		filenameerror()
+
+def rgb_encrypt():
+	
+	try:
 			
 			img = cv.imread(askopenfilename())
 			#print(type(img))
@@ -105,15 +102,6 @@ def encrypt():
 
 			enfinish()
 
-			myframe = ttk.Frame(image_window)
-			myentry = ttk.Entry(myframe, textvariable=img, state='readonly')
-			myscroll = ttk.Scrollbar(myframe, orient='vertical', command=myentry.xview)
-			myentry.config(xscrollcommand=myscroll.set)
-				
-			myframe.place()
-			myentry.place(x=30, y=30)
-			myscroll.place(x=40, y=40)
-			image_window.mainloop()
 		
 	except TypeError:
 		filenameerror()
@@ -123,11 +111,9 @@ def encrypt():
 				
 			
 
-def decrypt():
+def grey_decrypt():
 
-	try:
-	
-		if(messagebox.askyesno('Select Mode', 'Do you want to have it as greyscale? ') == True): 
+	try: 
 				
 			img1 = imageio.imread(askopenfilename())
 			print('\n\nReading Encrypted Image again:\n\n')
@@ -153,8 +139,16 @@ def decrypt():
 			print(eTime)
 			
 			definish()
+	
+	except TypeError:
+		filenameerror()
 
-		else:
+	except AttributeError:
+		filenameerror()
+
+def rgb_decrypt():
+
+	try:
 
 			img1 = imageio.imread(askopenfilename(), format='PNG-FI')
 			print('\n\nReading Encrypted Image again:\n\n')
@@ -186,11 +180,15 @@ def decrypt():
 	except AttributeError:
 		filenameerror()
 
-btn_decrypt = Button( image_window, text = "Image Decryption", command = decrypt)
-btn_decrypt.place( x=20, y=100 )
+btn_rgb_decrypt = Button( image_window, text = "RGB Image Decryption", command = rgb_decrypt)
+btn_rgb_decrypt.place( x=10, y=100 )
+btn_grey_decrypt = Button( image_window, text = "Grey Image Decryption", command = grey_decrypt)
+btn_grey_decrypt.place( x=180, y=100 )
 #btn_decrypt.bind('<Return>', decrypt)
-btn_encrypt = Button( image_window, text = "Image Encryption", command = encrypt)
-btn_encrypt.place( x=200, y=100 )
+btn_grey_encrypt = Button( image_window, text = "Grey Image Decryption", command = grey_encrypt)
+btn_grey_encrypt.place( x=180, y=50 )
+btn_rgb_encrypt = Button( image_window, text = "RGB Image Encryption", command = rgb_encrypt)
+btn_rgb_encrypt.place( x=10, y=50 )
 #btn_encrypt.bind('<Return>', encrypt)
 btn_exit = Button( image_window, text = "Go Back" , command = goback).place( x=140, y=150 )
 image_window.mainloop()
